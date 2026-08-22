@@ -8,9 +8,14 @@ import modelo.Material;
 import modelo.NivelComplejidad;
 import modelo.Periodicidad;
 import modelo.Revista;
+import modelo.Prestamo;
+import modelo.Usuario;
+import modelo.UsuarioEstandar;
+import modelo.UsuarioPremium;
 import servicio.Biblioteca;
 
 import java.util.List;
+import java.util.Map;
 
 public class BibliotecaControlador {
 
@@ -74,46 +79,43 @@ public class BibliotecaControlador {
         return material.calcularDiasPrestamo();
     }
 
-    // Firmas acordadas para que Óscar arme la GUI ya. El cuerpo llega cuando Alex suba
-    // modelo.Usuario, sus dos perfiles y modelo.Prestamo. Ninguna cambia de firma.
-
     public void altaUsuario(String id, String nombre, boolean premium) {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario (Alex).");
+        biblioteca.registrarUsuario(premium ? new UsuarioPremium(id, nombre) : new UsuarioEstandar(id, nombre));
     }
 
-    public List<String> listarUsuarios() {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario (Alex).");
+    public List<Usuario> listarUsuarios() {
+        return biblioteca.getUsuarios();
     }
 
     public void prestar(String idUsuario, String codigoMaterial) throws BibliotecaException {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario y modelo.Prestamo (Alex).");
+        biblioteca.prestar(idUsuario, codigoMaterial);
     }
 
     public void devolver(String idUsuario, String codigoMaterial) throws BibliotecaException {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario y modelo.Prestamo (Alex).");
+        biblioteca.devolver(idUsuario, codigoMaterial);
     }
 
     public void reservar(String idUsuario, String codigoMaterial) throws BibliotecaException {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario (Alex).");
+        biblioteca.reservar(idUsuario, codigoMaterial);
     }
 
     public void cancelarReserva(String idUsuario, String codigoMaterial) throws BibliotecaException {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario (Alex).");
+        biblioteca.cancelarReserva(idUsuario, codigoMaterial);
     }
 
-    public List<String> listarPrestamosActivos() {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Prestamo (Alex).");
+    public List<Prestamo> listarPrestamosActivos() {
+        return biblioteca.getPrestamosActivos();
     }
 
-    public int diasPenalizacionAcumulados(String idUsuario) {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario (Alex).");
+    public int diasPenalizacionAcumulados(String idUsuario) throws BibliotecaException {
+        return biblioteca.diasPenalizacionAcumulados(idUsuario);
     }
 
-    public boolean estaPenalizado(String idUsuario) {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Usuario (Alex).");
+    public boolean estaPenalizado(String idUsuario) throws BibliotecaException {
+        return biblioteca.estaPenalizado(idUsuario);
     }
 
-    public List<String> materialesMasSolicitados() {
-        throw new UnsupportedOperationException("Pendiente: requiere modelo.Prestamo (Alex).");
+    public Map<Material, Integer> materialesMasSolicitados() {
+        return biblioteca.getMasSolicitados();
     }
 }

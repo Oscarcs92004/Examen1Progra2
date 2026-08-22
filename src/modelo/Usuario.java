@@ -26,6 +26,10 @@ public abstract class Usuario {
 
     public abstract int getLimitePrestamos();
 
+    public abstract boolean puedeReservar();
+
+    public abstract boolean puedeAcceder(NivelComplejidad nivel);
+
     public String getId() {
         return id;
     }

@@ -13,10 +13,12 @@ public class UsuarioEstandar extends Usuario {
         return LIMITE_PRESTAMOS;
     }
 
+    @Override
     public boolean puedeReservar() {
         return false;
     }
 
+    @Override
     public boolean puedeAcceder(NivelComplejidad nivel) {
         return nivel != NivelComplejidad.ALTO;
     }
