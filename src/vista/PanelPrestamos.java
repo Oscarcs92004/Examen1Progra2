@@ -297,7 +297,7 @@ public class PanelPrestamos extends JPanel {
                 .append(" / ").append(usuario.getLimitePrestamos()).append("\n");
 
         if (usuario.estaPenalizado()) {
-            texto.append("PENALIZADO hasta: ").append(usuario.getPenalizadoHasta()).append("\n");
+            texto.append("PENALIZADO hasta: ").append(usuario.getPenalizadoHasta().getTime()).append("\n");
         } else {
             texto.append("Sin penalización vigente.\n");
         }
@@ -315,7 +315,7 @@ public class PanelPrestamos extends JPanel {
             texto.append("  (ninguno)\n");
         } else {
             for (Prestamo prestamo : activos) {
-                texto.append("  - ").append(prestamo).append("\n");
+                texto.append("  - ").append(prestamo.getMaterial().getTitulo()).append("\n");
             }
         }
 

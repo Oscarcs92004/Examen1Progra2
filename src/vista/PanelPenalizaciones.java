@@ -120,7 +120,7 @@ public class PanelPenalizaciones extends JPanel {
             texto.append("  (sin préstamos registrados)\n");
         } else {
             for (Prestamo prestamo : historial) {
-                texto.append("  - ").append(prestamo)
+                texto.append("  - ").append(prestamo.getMaterial().getTitulo())
                         .append("  (").append(prestamo.getDiasRetraso()).append(" día(s) de retraso")
                         .append(prestamo.estaVencido() ? ", VENCIDO" : "").append(")\n");
             }
