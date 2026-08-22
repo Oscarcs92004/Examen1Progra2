@@ -310,7 +310,7 @@ public class PanelPrestamos extends JPanel {
         }
 
         texto.append("\nPréstamos en curso:\n");
-        List<Prestamo> activos = usuario.getPrestamosActivos();
+        List<Prestamo> activos = controlador.prestamosActivosDe(usuario.getId());
         if (activos.isEmpty()) {
             texto.append("  (ninguno)\n");
         } else {

@@ -1,29 +1,28 @@
 import controlador.BibliotecaControlador;
-import excepciones.BibliotecaException;
 import modelo.FormatoAV;
-import modelo.Libro;
 import modelo.Material;
 import modelo.NivelComplejidad;
 import modelo.Periodicidad;
-import modelo.Revista;
 import servicio.Biblioteca;
+import vista.VentanaPrincipal;
 
-import java.util.List;
-
-// Provisional: cuando la GUI esté lista, este main solo cargará los datos y abrirá VentanaPrincipal.
 public class Main {
 
-    public static void main(String[] args) throws BibliotecaException {
+    public static void main(String[] args) {
         Biblioteca biblioteca = new Biblioteca();
         BibliotecaControlador controlador = new BibliotecaControlador(biblioteca);
 
         cargarDatosIniciales(controlador);
-
+        cargarUsuariosIniciales(controlador);
         mostrarCatalogoPolimorfico(controlador);
-        mostrarBusquedas(controlador);
-        mostrarFiltroGenerico(controlador);
-        mostrarOrdenaciones(controlador);
-        mostrarFlujoDeReservas(controlador);
+
+        VentanaPrincipal.iniciar(controlador);
+    }
+
+    public static void cargarUsuariosIniciales(BibliotecaControlador controlador) {
+        controlador.altaUsuario("U001", "Alex Enamorado", false);
+        controlador.altaUsuario("U002", "Marcelo García", true);
+        controlador.altaUsuario("U003", "Óscar Canahuati", false);
     }
 
     public static void cargarDatosIniciales(BibliotecaControlador controlador) {
@@ -60,68 +59,7 @@ public class Main {
         System.out.println("Disponibles ahora mismo: " + controlador.contarDisponibles());
     }
 
-    private static void mostrarBusquedas(BibliotecaControlador controlador) {
-        System.out.println();
-        System.out.println("=== BÚSQUEDAS RECURSIVAS ===");
-        System.out.println("Exacta por código \"R002\": " + controlador.buscarExacto("R002"));
-        System.out.println("Exacta por título \"El principito\": " + controlador.buscarExacto("El principito"));
-        System.out.println("Exacta inexistente \"XXX\": " + controlador.buscarExacto("XXX"));
-        System.out.println("Parcial \"el\": " + controlador.buscarPorTituloParcial("el"));
-        System.out.println("Nivel ALTO: " + controlador.buscarPorNivel(NivelComplejidad.ALTO));
-    }
 
-    private static void mostrarFiltroGenerico(BibliotecaControlador controlador) {
-        System.out.println();
-        System.out.println("=== FILTRO GENÉRICO POR TIPO ===");
 
-        List<Libro> libros = controlador.filtrarPorTipo(Libro.class);
-        for (Libro libro : libros) {
-            System.out.println("Libro de " + libro.getAutor() + ": " + libro.getTitulo());
-        }
 
-        List<Revista> revistas = controlador.filtrarPorTipo(Revista.class);
-        for (Revista revista : revistas) {
-            System.out.println("Revista " + revista.getPeriodicidad() + ": " + revista.getTitulo());
-        }
-    }
-
-    private static void mostrarOrdenaciones(BibliotecaControlador controlador) {
-        System.out.println();
-        System.out.println("=== ORDEN NATURAL (título) ===");
-        System.out.println(controlador.listarMateriales());
-
-        System.out.println();
-        System.out.println("=== ORDEN POR COMPLEJIDAD ===");
-        for (Material material : controlador.listarMaterialesPorComplejidad()) {
-            System.out.println(material.getNivel() + " -> " + material);
-        }
-    }
-
-    private static void mostrarFlujoDeReservas(BibliotecaControlador controlador) throws BibliotecaException {
-        Material material = controlador.buscarExacto("R001");
-
-        System.out.println();
-        System.out.println("=== FLUJO DE RESERVAS sobre " + material + " ===");
-
-        material.prestar("U001");
-        System.out.println("U001 lo presta -> " + material.getEstado().getEtiqueta()
-                + " | disponibles: " + controlador.contarDisponibles());
-
-        material.reservar("U002");
-        material.reservar("U003");
-        System.out.println("Cola de reservas: " + material.getColaReservas());
-
-        material.devolver();
-        System.out.println("U001 lo devuelve -> " + material.getEstado().getEtiqueta()
-                + " para " + material.getReservadoPara() + " | cola: " + material.getColaReservas());
-
-        try {
-            material.prestar("U003");
-        } catch (BibliotecaException e) {
-            System.out.println("U003 intenta prestarlo -> " + e.getMessage());
-        }
-
-        material.prestar("U002");
-        System.out.println("U002 lo presta -> " + material.getEstado().getEtiqueta());
-    }
 }

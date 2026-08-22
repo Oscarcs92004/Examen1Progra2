@@ -3,6 +3,7 @@ package servicio;
 import excepciones.AutorizacionRequeridaException;
 import excepciones.BibliotecaException;
 import excepciones.LimitePrestamosException;
+import excepciones.UsuarioPenalizadoException;
 import interfaces.Prestable;
 import modelo.ComparadorPorComplejidad;
 import modelo.Material;
@@ -12,12 +13,18 @@ import modelo.Usuario;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 public class Biblioteca {
+
+    public static final Comparator<Material> POR_COMPLEJIDAD = new ComparadorPorComplejidad();
 
     private static final int DIAS_PENALIZACION_POR_DIA_RETRASO = 2;
 
@@ -139,8 +146,9 @@ public class Biblioteca {
         Material material = exigirMaterial(codigoMaterial);
 
         if (usuario.estaPenalizado()) {
-            throw new BibliotecaException("El usuario " + usuario.getNombre()
-                    + " tiene una penalización vigente y no puede solicitar préstamos.");
+            LocalDate hasta = usuario.getPenalizadoHasta().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            throw new UsuarioPenalizadoException(usuario.getNombre(), hasta);
         }
         if (usuario.getPrestamosActivos().size() >= usuario.getLimitePrestamos()) {
             throw new LimitePrestamosException(usuario.getNombre(), usuario.getLimitePrestamos());
@@ -179,6 +187,32 @@ public class Biblioteca {
 
         usuario.getPrestamosActivos().remove(material);
         material.devolver();
+    }
+
+    public void devolver(String codigoMaterial) throws BibliotecaException {
+        Material material = exigirMaterial(codigoMaterial);
+        for (Prestamo prestamo : historial) {
+            if (prestamo.estaActivo() && prestamo.getMaterial() == material) {
+                devolver(prestamo.getUsuario().getId(), codigoMaterial);
+                return;
+            }
+        }
+        throw new BibliotecaException("El material \"" + material.getTitulo()
+                + "\" no figura como prestado a ningún usuario.");
+    }
+
+    public List<Prestamo> getPrestamosActivosDe(String idUsuario) {
+        List<Prestamo> activos = new ArrayList<>();
+        Usuario usuario = buscarUsuario(idUsuario);
+        if (usuario == null) {
+            return activos;
+        }
+        for (Prestamo prestamo : historial) {
+            if (prestamo.estaActivo() && prestamo.getUsuario() == usuario) {
+                activos.add(prestamo);
+            }
+        }
+        return activos;
     }
 
     public void reservar(String idUsuario, String codigoMaterial) throws BibliotecaException {

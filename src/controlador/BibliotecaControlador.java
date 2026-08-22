@@ -43,6 +43,30 @@ public class BibliotecaControlador {
                 new Audiovisual(titulo, codigo, diasBase, nivel, rutaImagen, duracionMinutos, formato));
     }
 
+    public void altaMaterial(Material material) {
+        biblioteca.registrarMaterial(material);
+    }
+
+    public List<Material> obtenerCatalogo() {
+        return biblioteca.getMateriales();
+    }
+
+    public List<Usuario> obtenerUsuarios() {
+        return biblioteca.getUsuarios();
+    }
+
+    public void altaUsuario(Usuario usuario) {
+        biblioteca.registrarUsuario(usuario);
+    }
+
+    public void devolver(String codigoMaterial) throws BibliotecaException {
+        biblioteca.devolver(codigoMaterial);
+    }
+
+    public List<Prestamo> prestamosActivosDe(String idUsuario) {
+        return biblioteca.getPrestamosActivosDe(idUsuario);
+    }
+
     public List<Material> listarMateriales() {
         return biblioteca.getMaterialesPorTitulo();
     }
