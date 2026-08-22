@@ -16,7 +16,7 @@ public abstract class Usuario {
         this.id = id;
         this.nombre = nombre;
     }
-    
+
     public int sumarDiasPenalizacion(int indice) {
         if (indice >= historial.size()) {
             return 0;
