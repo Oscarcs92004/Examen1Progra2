@@ -15,13 +15,19 @@ public class VentanaPrincipal extends JFrame {
 
         PanelMateriales panelMateriales = new PanelMateriales(controlador);
         PanelPrestamos panelPrestamos = new PanelPrestamos(controlador, panelMateriales);
+        PanelUsuarios panelUsuarios = new PanelUsuarios(controlador);
+        PanelPenalizaciones panelPenalizaciones = new PanelPenalizaciones(controlador);
 
         JTabbedPane pestanias = new JTabbedPane();
         pestanias.addTab("Materiales", panelMateriales);
         pestanias.addTab("Usuarios y préstamos", panelPrestamos);
+        pestanias.addTab("Usuarios", panelUsuarios);
+        pestanias.addTab("Penalizaciones", panelPenalizaciones);
         pestanias.addChangeListener(e -> {
             panelMateriales.refrescar();
             panelPrestamos.refrescar();
+            panelUsuarios.refrescar();
+            panelPenalizaciones.refrescar();
         });
 
         setContentPane(pestanias);
