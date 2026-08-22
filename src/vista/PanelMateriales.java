@@ -92,7 +92,7 @@ public class PanelMateriales extends JPanel {
         panel.setBorder(BorderFactory.createTitledBorder("Búsqueda"));
 
         JButton botonExacta = new JButton("Buscar por título/código");
-        botonExacta.addActionListener(e -> buscarExacto());
+        botonExacta.addActionListener(e -> buscar());
 
         JButton botonPorNivel = new JButton("Ver por nivel");
         botonPorNivel.addActionListener(e -> buscarPorNivel());
@@ -226,22 +226,22 @@ public class PanelMateriales extends JPanel {
         }
     }
 
-    private void buscarExacto() {
+    private void buscar() {
         String clave = campoBusqueda.getText().trim();
         if (clave.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Escribe un título o código para buscar.",
                     "Búsqueda vacía", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Material encontrado = controlador.buscarExacto(clave);
-        modeloLista.clear();
-        if (encontrado == null) {
+        List<Material> resultados = controlador.buscar(clave);
+        if (resultados.isEmpty()) {
+            modeloLista.clear();
             JOptionPane.showMessageDialog(this, "No se encontró ningún material con \"" + clave + "\".",
                     "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            modeloLista.addElement(encontrado);
-            listaMateriales.setSelectedIndex(0);
+            return;
         }
+        cargarLista(resultados);
+        listaMateriales.setSelectedIndex(0);
     }
 
     private void buscarPorNivel() {
@@ -282,7 +282,7 @@ public class PanelMateriales extends JPanel {
                         (FormatoAV) comboFormato.getSelectedItem());
             }
 
-            controlador.altaMaterial(material);
+            controlador.agregarMaterial(material);
             limpiarFormularioAlta();
             refrescar();
             JOptionPane.showMessageDialog(this, "Material agregado correctamente.",

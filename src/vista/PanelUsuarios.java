@@ -162,7 +162,7 @@ public class PanelUsuarios extends JPanel {
                 ? new UsuarioPremium(id, nombre)
                 : new UsuarioEstandar(id, nombre);
 
-        controlador.altaUsuario(usuario);
+        controlador.agregarUsuario(usuario);
         campoIdUsuario.setText("");
         campoNombreUsuario.setText("");
         refrescar();

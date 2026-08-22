@@ -25,25 +25,25 @@ public class BibliotecaControlador {
         this.biblioteca = biblioteca;
     }
 
-    public void altaLibro(String titulo, String codigo, int diasBase, NivelComplejidad nivel,
+    public void agregarLibro(String titulo, String codigo, int diasBase, NivelComplejidad nivel,
                           String rutaImagen, String autor, int numeroPaginas, String isbn) {
         biblioteca.registrarMaterial(
                 new Libro(titulo, codigo, diasBase, nivel, rutaImagen, autor, numeroPaginas, isbn));
     }
 
-    public void altaRevista(String titulo, String codigo, int diasBase, NivelComplejidad nivel,
+    public void agregarRevista(String titulo, String codigo, int diasBase, NivelComplejidad nivel,
                             String rutaImagen, int numeroEdicion, Periodicidad periodicidad) {
         biblioteca.registrarMaterial(
                 new Revista(titulo, codigo, diasBase, nivel, rutaImagen, numeroEdicion, periodicidad));
     }
 
-    public void altaAudiovisual(String titulo, String codigo, int diasBase, NivelComplejidad nivel,
+    public void agregarAudiovisual(String titulo, String codigo, int diasBase, NivelComplejidad nivel,
                                 String rutaImagen, int duracionMinutos, FormatoAV formato) {
         biblioteca.registrarMaterial(
                 new Audiovisual(titulo, codigo, diasBase, nivel, rutaImagen, duracionMinutos, formato));
     }
 
-    public void altaMaterial(Material material) {
+    public void agregarMaterial(Material material) {
         biblioteca.registrarMaterial(material);
     }
 
@@ -55,7 +55,7 @@ public class BibliotecaControlador {
         return biblioteca.getUsuarios();
     }
 
-    public void altaUsuario(Usuario usuario) {
+    public void agregarUsuario(Usuario usuario) {
         biblioteca.registrarUsuario(usuario);
     }
 
@@ -77,6 +77,14 @@ public class BibliotecaControlador {
 
     public Material buscarExacto(String tituloOCodigo) {
         return biblioteca.buscarExacto(tituloOCodigo);
+    }
+
+    public List<Material> buscar(String tituloOCodigo) {
+        Material exacto = biblioteca.buscarExacto(tituloOCodigo);
+        if (exacto != null) {
+            return List.of(exacto);
+        }
+        return biblioteca.buscarPorTituloParcial(tituloOCodigo);
     }
 
     public List<Material> buscarPorTituloParcial(String fragmento) {
@@ -103,7 +111,7 @@ public class BibliotecaControlador {
         return material.calcularDiasPrestamo();
     }
 
-    public void altaUsuario(String id, String nombre, boolean premium) {
+    public void agregarUsuario(String id, String nombre, boolean premium) {
         biblioteca.registrarUsuario(premium ? new UsuarioPremium(id, nombre) : new UsuarioEstandar(id, nombre));
     }
 
