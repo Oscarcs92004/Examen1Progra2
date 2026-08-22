@@ -14,14 +14,14 @@ public class VentanaPrincipal extends JFrame {
         super("Biblioteca - Sistema de gestión de préstamos");
 
         PanelMateriales panelMateriales = new PanelMateriales(controlador);
-        // PanelPrestamos panelPrestamos = new PanelPrestamos();
+        PanelPrestamos panelPrestamos = new PanelPrestamos(controlador, panelMateriales);
 
         JTabbedPane pestanias = new JTabbedPane();
         pestanias.addTab("Materiales", panelMateriales);
-        //pestanias.addTab();
+        pestanias.addTab("Usuarios y préstamos", panelPrestamos);
         pestanias.addChangeListener(e -> {
-            //panelMateriales.refrescar();
-            //panelPrestamos.refrescar();
+            panelMateriales.refrescar();
+            panelPrestamos.refrescar();
         });
 
         setContentPane(pestanias);
