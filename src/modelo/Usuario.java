@@ -9,12 +9,19 @@ public abstract class Usuario {
     private final String nombre;
 
     private final ArrayList<Material> prestamosActivos = new ArrayList<>();
-    private final ArrayList<Material> historial = new ArrayList<>();
+    private final ArrayList<Prestamo> historial = new ArrayList<>();
     private Calendar penalizadoHasta;
 
     protected Usuario(String id, String nombre) {
         this.id = id;
         this.nombre = nombre;
+    }
+    
+    public int sumarDiasPenalizacion(int indice) {
+        if (indice >= historial.size()) {
+            return 0;
+        }
+        return historial.get(indice).getDiasRetraso() + sumarDiasPenalizacion(indice + 1);
     }
 
     public abstract int getLimitePrestamos();
@@ -31,9 +38,10 @@ public abstract class Usuario {
         return prestamosActivos;
     }
 
-    public ArrayList<Material> getHistorial() {
+    public ArrayList<Prestamo> getHistorial() {
         return historial;
     }
+
 
     public Calendar getPenalizadoHasta() {
         return penalizadoHasta;
