@@ -13,10 +13,12 @@ public class UsuarioPremium extends Usuario {
         return LIMITE_PRESTAMOS;
     }
 
+    @Override
     public boolean puedeReservar() {
         return true;
     }
 
+    @Override
     public boolean puedeAcceder(NivelComplejidad nivel) {
         return true;
     }
