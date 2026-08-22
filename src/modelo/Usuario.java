@@ -1,7 +1,7 @@
 package modelo;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public abstract class Usuario {
 
@@ -10,7 +10,7 @@ public abstract class Usuario {
 
     private final ArrayList<Material> prestamosActivos = new ArrayList<>();
     private final ArrayList<Material> historial = new ArrayList<>();
-    private LocalDate penalizadoHasta;
+    private Calendar penalizadoHasta;
 
     protected Usuario(String id, String nombre) {
         this.id = id;
@@ -35,16 +35,16 @@ public abstract class Usuario {
         return historial;
     }
 
-    public LocalDate getPenalizadoHasta() {
+    public Calendar getPenalizadoHasta() {
         return penalizadoHasta;
     }
 
-    public void setPenalizadoHasta(LocalDate penalizadoHasta) {
+    public void setPenalizadoHasta(Calendar penalizadoHasta) {
         this.penalizadoHasta = penalizadoHasta;
     }
 
     public boolean estaPenalizado() {
-        return penalizadoHasta != null && LocalDate.now().isBefore(penalizadoHasta);
+        return penalizadoHasta != null && Calendar.getInstance().before(penalizadoHasta);
     }
 
     @Override
