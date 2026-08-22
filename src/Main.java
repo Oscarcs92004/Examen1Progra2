@@ -1,10 +1,14 @@
 import controlador.BibliotecaControlador;
+import excepciones.BibliotecaException;
 import modelo.FormatoAV;
 import modelo.Material;
+import modelo.Prestamo;
 import modelo.NivelComplejidad;
 import modelo.Periodicidad;
 import servicio.Biblioteca;
 import vista.VentanaPrincipal;
+
+import java.util.Calendar;
 
 public class Main {
 
@@ -14,6 +18,7 @@ public class Main {
 
         cargarDatosIniciales(controlador);
         cargarUsuariosIniciales(controlador);
+        cargarHistorialDeEjemplo(controlador);
         mostrarCatalogoPolimorfico(controlador);
 
         VentanaPrincipal.iniciar(controlador);
@@ -23,6 +28,23 @@ public class Main {
         controlador.agregarUsuario("U001", "Alex Enamorado", false);
         controlador.agregarUsuario("U002", "Marcelo García", true);
         controlador.agregarUsuario("U003", "Óscar Canahuati", false);
+    }
+
+    // Se retrasa la fecha de vencimiento antes de devolver para que al abrir la aplicacion
+    // ya exista una penalizacion vigente y la pestaña de penalizaciones tenga contenido.
+    public static void cargarHistorialDeEjemplo(BibliotecaControlador controlador) {
+        try {
+            controlador.prestar("U003", "A002");
+            Prestamo prestamo = controlador.prestamosActivosDe("U003").get(0);
+            Calendar vencida = Calendar.getInstance();
+            vencida.add(Calendar.DATE, -4);
+            prestamo.setFechaDevolucionPrevista(vencida);
+            controlador.devolver("U003", "A002");
+
+            controlador.prestar("U002", "L003");
+        } catch (BibliotecaException e) {
+            System.out.println("No se pudo preparar el historial de ejemplo: " + e.getMessage());
+        }
     }
 
     public static void cargarDatosIniciales(BibliotecaControlador controlador) {
